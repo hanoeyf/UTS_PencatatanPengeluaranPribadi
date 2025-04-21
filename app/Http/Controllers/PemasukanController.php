@@ -22,9 +22,7 @@ class PemasukanController extends Controller
     $page = (object) [
         'title' => 'Daftar pemasukan dalam sistem'
     ];
-
     $activeMenu = 'pemasukan'; 
-
 
     $asalList = PemasukanModel::select('asal')->distinct()->pluck('asal');
     $pemasukanList = PemasukanModel::all();
@@ -39,18 +37,17 @@ class PemasukanController extends Controller
     public function list(Request $request)
     {
         $pemasukan = PemasukanModel::select('id', 'nama', 'jumlah', 'asal', 'tanggal');
-
-    
         if ($request->asal) {
             $pemasukan->where('asal', $request->asal);
         }
-
         return DataTables::of($pemasukan)
             ->addIndexColumn()
             ->addColumn('aksi', function ($pemasukan) {
                 $btn  = '<a href="'. url('/pemasukan/' . $pemasukan->id) .'" class="btn btn-info btn-sm">Detail</a> ';
-                $btn .= '<button onclick="modalAction(\''. url('/pemasukan/' . $pemasukan->id .'/edit_ajax') .'\')" class="btn btn-warning btn-sm">Edit</button> ';
-                $btn .= '<button onclick="modalAction(\''. url('/pemasukan/' . $pemasukan->id .'/delete_ajax') .'\')" class="btn btn-danger btn-sm">Hapus</button> ';
+                $btn .= '<button onclick="modalAction(\''. url('/pemasukan/' . $pemasukan->id .'/edit_ajax') 
+                .'\')" class="btn btn-warning btn-sm">Edit</button> ';
+                $btn .= '<button onclick="modalAction(\''. url('/pemasukan/' . $pemasukan->id .'/delete_ajax') 
+                .'\')" class="btn btn-danger btn-sm">Hapus</button> ';
             
                 return $btn;
             })
@@ -244,14 +241,11 @@ class PemasukanController extends Controller
                     'msgField' => $validator->errors(),
                 ]);
             }
-
             PemasukanModel::create($request->all());
             return response()->json([
                 'status' => true,
                 'message' => 'Data pemasukan berhasil disimpan'
             ]);
-            
-
         }
         return redirect('/');
         
@@ -262,7 +256,7 @@ class PemasukanController extends Controller
         $pemasukan = PemasukanModel::find($id);
         return view('pemasukan.detail_ajax', compact('pemasukan'));
     }
-    // AJAX Edit
+
     // Menampilkan halaman form edit pemasukan dengan AJAX
     public function edit_ajax(string $id)
     {
@@ -274,8 +268,6 @@ class PemasukanController extends Controller
 
         return view('pemasukan.edit_ajax', ['pemasukan' => $pemasukan]);
     }
-
-    
 
     // AJAX Update
     public function update_ajax(Request $request, $id)

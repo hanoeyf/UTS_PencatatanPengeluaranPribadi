@@ -72,27 +72,6 @@
 
     var dataPengeluaran;
 
-    // Fungsi untuk menghapus data pengeluaran menggunakan AJAX
-    $(document).on('click', '.delete-pengeluaran', function() {
-        var id = $(this).data('id');
-        if (confirm("Apakah Anda yakin ingin menghapus pengeluaran ini?")) {
-            $.ajax({
-                url: '/pengeluaran/' + id + '/delete_ajax',
-                type: 'DELETE',
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    alert(response.success);
-                    dataPengeluaran.ajax.reload();
-                },
-                error: function(xhr) {
-                    alert('Error: ' + xhr.responseText);
-                }
-            });
-        }
-    });
-
     // Ketika dokumen siap, initialize DataTable dan konfigurasi filter
     $(document).ready(function() {
         dataPengeluaran = $('#table_pengeluaran').DataTable({

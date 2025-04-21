@@ -18,7 +18,6 @@
 </div>
 @else
 <form action="{{ url('/pemasukan/' . $pemasukan->id . '/update_ajax') }}" method="POST" id="form-edit-pemasukan">
-
     @csrf 
     @method('PUT')
     <div id="modal-master" class="modal-dialog modal-lg" role="document">

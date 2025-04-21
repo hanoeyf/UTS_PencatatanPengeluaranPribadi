@@ -71,56 +71,36 @@
 
     var dataPemasukan;
 
-    // Fungsi untuk menghapus data pemasukan menggunakan AJAX
-    $(document).on('click', '.delete-pemasukan', function() {
-        var id = $(this).data('id');
-        if (confirm("Apakah Anda yakin ingin menghapus pemasukan ini?")) {
-            $.ajax({
-                url: '/pemasukan/' + id + '/delete_ajax',
-                type: 'DELETE',
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    alert(response.success);
-                    dataPemasukan.ajax.reload();
-                },
-                error: function(xhr) {
-                    alert('Error: ' + xhr.responseText);
-                }
-            });
-        }
-    });
-
     // Ketika dokumen siap, initialize DataTable dan konfigurasi filter
-    $(document).ready(function() {
-        dataPemasukan = $('#table_pemasukan').DataTable({
-            serverSide: true,
-            ajax: {
-                url: "{{ url('pemasukan/list') }}",
-                "dataType": "json",
-                type: "POST",
-                data: function (d) {
-                    d.asal = $('#asal').val(); // Mengirimkan filter asal
-                },
+$(document).ready(function() {
+    dataPemasukan = $('#table_pemasukan').DataTable({
+        serverSide: true,
+        ajax: {
+            url: "{{ url('pemasukan/list') }}",
+            type: "POST",
+            data: function(d) {
+                d.asal = $('#asal').val(); // Mengirimkan filter asal
             },
-            columns: [
-                { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
-                { data: "nama" },
-                { data: "jumlah" },
-                { data: "asal" },
-                { data: "tanggal" },
-                { data: "aksi", orderable: false, searchable: false }
-            ]
-            
-        });
-
-        // Event ketika filter asal berubah
-        $('#asal').on('change', function(){
-            if ($.fn.DataTable.isDataTable('#table_pemasukan')) {
-                dataPemasukan.ajax.reload();
+            error: function(xhr, error, code) {
+                alert('Error loading data: ' + error);
             }
-        });
+        },
+        columns: [
+            { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
+            { data: "nama" },
+            { data: "jumlah" },
+            { data: "asal" },
+            { data: "tanggal" },
+            { data: "aksi", orderable: false, searchable: false }
+        ]
     });
+
+    // Event ketika filter asal berubah
+    $('#asal').on('change', function(){
+        // Memastikan DataTable melakukan reload setelah filter berubah
+        dataPemasukan.ajax.reload();
+    });
+});
+
 </script>
 @endpush

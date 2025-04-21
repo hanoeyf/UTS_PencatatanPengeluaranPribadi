@@ -2,14 +2,14 @@
 <div id="modal-master" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Kesalahan</h5>
+            <h5 class="modal-title">Kesalahan</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
             <div class="alert alert-danger">
-                <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
+                <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5> 
                 Data yang anda cari tidak ditemukan.
             </div>
             <a href="{{ url('/pemasukan') }}" class="btn btn-warning">Kembali</a>
@@ -17,81 +17,64 @@
     </div>
 </div>
 @else
-<form action="{{ url('/pemasukan/' . $pemasukan->id . '/delete_ajax') }}" method="POST" id="form-delete">
-    @csrf
-    @method('DELETE')
-    <div id="modal-master" class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Hapus Data Pemasukan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-warning">
-                    <h5><i class="icon fas fa-ban"></i> Konfirmasi !!!</h5>
-                    Apakah Anda ingin menghapus data pemasukan seperti di bawah ini?
-                </div>
-                <table class="table table-sm table-bordered table-striped">
-                    <tr><th class="text-right col-3">Nama :</th><td class="col-9">{{ $pemasukan->nama }}</td></tr>
-                    <tr><th class="text-right col-3">Jumlah :</th><td class="col-9">{{ $pemasukan->jumlah }}</td></tr>
-                    <tr><th class="text-right col-3">Asal :</th><td class="col-9">{{ $pemasukan->asal }}</td></tr>
-                    <tr><th class="text-right col-3">Tanggal :</th><td class="col-9">{{ $pemasukan->tanggal }}</td></tr>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                <button type="submit" class="btn btn-primary">Ya, Hapus</button>
-            </div>
+<div id="modal-master" class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title">Konfirmasi Hapus</h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Apakah kamu yakin ingin menghapus data <strong>{{ $pemasukan->nama }}</strong>?</p>
+            <ul>
+                <li>Jumlah: <strong>Rp {{ number_format($pemasukan->jumlah, 0, ',', '.') }}</strong></li>
+                <li>Asal: <strong>{{ $pemasukan->asal }}</strong></li>
+                <li>Tanggal: <strong>{{ \Carbon\Carbon::parse($pemasukan->tanggal)->format('d-m-Y') }}</strong></li>
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-secondary">Batal</button>
+            <button type="button" class="btn btn-danger" id="btn-confirm-delete" data-id="{{ $pemasukan->id }}">Hapus</button>
         </div>
     </div>
-</form>
+</div>
 
 <script>
 $(document).ready(function() {
-    $("#form-delete").validate({
-        rules: {},
-        submitHandler: function(form) {
-            $.ajax({
-                url: form.action,
-                type: form.method,
-                data: $(form).serialize(),
-                success: function(response) {
-                    if(response.status){
-                        $('#myModal').modal('hide');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: response.message
-                        });
-                        dataPemasukan.ajax.reload(); // Reload data table
-                    } else {
-                        $('.error-text').text('');
-                        $.each(response.msgField, function(prefix, val) {
-                            $('#error-' + prefix).text(val[0]);
-                        });
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Terjadi Kesalahan',
-                            text: response.message
-                        });
-                    }
+    $('#btn-confirm-delete').click(function() {
+        var id = $(this).data('id');
+        $.ajax({
+            url: `/pemasukan/${id}/delete_ajax`,
+            type: 'DELETE',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.status) {
+                    $('#myModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: response.message
+                    });
+                    dataPemasukan.ajax.reload(); 
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: response.message
+                    });
                 }
-            });
-            return false;
-        },
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-        }
+            },
+            error: function(xhr) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: 'Terjadi kesalahan saat menghapus data.'
+                });
+            }
+        });
     });
 });
 </script>

@@ -201,6 +201,18 @@ class PengeluaranController extends Controller
         return redirect('/');
     }
 
+    public function show_ajax($id)
+    {
+        $pengeluaran = PengeluaranModel::find($id);
+        return view('pengeluaran.detail_ajax', compact('pengeluaran'));
+    }
+
+    public function edit_ajax(string $id)
+    {
+        $pengeluaran = PengeluaranModel::find($id);
+
+        return view('pengeluaran.edit_ajax', ['pengeluaran' => $pengeluaran]);
+    }
 
     public function update_ajax(Request $request, $id)
     {

@@ -7,14 +7,6 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
 
-                <!-- Dashboard -->
-                <li class="nav-item">
-                    <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
-
                 <!-- Pemasukan -->
                 <li class="nav-item">
                     <a href="{{ url('pemasukan') }}" class="nav-link {{ request()->is('pemasukan*') ? 'active' : '' }}">

@@ -54,7 +54,7 @@
                 type: form.method,
                 data: $(form).serialize(),
                 success: function (response) {
-                    console.log(response); // pindahkan ke sini
+                    console.log(response); 
                     if (response.status) {
                         $('#modal-pemasukan').modal('hide');  // Menutup modal setelah sukses
                         $('#form-tambah-pemasukan')[0].reset();  // Reset form untuk kosongkan input
