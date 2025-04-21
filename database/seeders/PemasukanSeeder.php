@@ -16,7 +16,6 @@ class PemasukanSeeder extends Seeder
                 'jumlah' => 150000,
                 'asal' => 'Gaji',
                 'tanggal' => Carbon::parse('2025-04-01'),
-                'saldo' => 150000,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -25,7 +24,6 @@ class PemasukanSeeder extends Seeder
                 'jumlah' => 105000,
                 'asal' => 'Gaji',
                 'tanggal' => Carbon::parse('2025-04-03'),
-                'saldo' => 255000, // Total setelah ditambah
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

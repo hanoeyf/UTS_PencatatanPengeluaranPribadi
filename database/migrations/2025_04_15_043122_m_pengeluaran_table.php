@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('pengeluaran', function (Blueprint $table) {
             $table->id();
             $table->string('nama', 255); // Tambahan
-            $table->decimal('jumlah', 15, 3);
+            $table->integer('jumlah');
             $table->string('tujuan', 255);
             $table->string('kategori', 100);
             $table->date('tanggal');
-            $table->decimal('saldo', 15, 3)->default(0);
             $table->timestamps();
         });
     }
