@@ -17,7 +17,8 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [WelcomeController::class, 'index']);
+    Route::get('/', [PemasukanController::class, 'index']);
+
     Route::group(['prefix' => 'pengeluaran'], function () {
         Route::get('/', [PengeluaranController::class, 'index']);
         Route::post('/list', [PengeluaranController::class, 'list']); // Hapus /user/ yang berlebihan

@@ -37,7 +37,12 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'Login Gagal',
+                    'msgField' => [
+                        'username' => ['Username atau password salah'],
+                        'password' => ['Username atau password salah']
+                    ]
                 ]);
+                
             }
         }
     
@@ -46,11 +51,16 @@ class AuthController extends Controller
     
 
     public function logout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+{
+    \Log::info('Memanggil logout...');
 
-        return redirect('login');
-    }
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    \Log::info('Berhasil logout dan invalidasi session.');
+
+    return redirect('login');
+}
+
 }
