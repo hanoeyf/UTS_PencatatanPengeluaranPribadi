@@ -13,12 +13,22 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('m_user')->insert([
-            'username' => 'admin',
-            'nama' => 'Administrator',
-            'password' => Hash::make('123456'),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $data = [
+            [
+                'level_id' => 1,
+                'username' => 'admin',
+                'nama' => 'Administrator',
+                'password' => Hash::make('123456'),
+            ],
+            [
+                'level_id' => 2,
+                'username' => 'user',
+                'nama' => 'user',
+                'password' => Hash::make('123456'),
+            ],
+            
+        ];
+
+        DB::table('m_user')->insert($data);
     }
 }

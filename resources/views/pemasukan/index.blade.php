@@ -80,6 +80,7 @@ $(document).ready(function() {
             type: "POST",
             data: function(d) {
                 d.asal = $('#asal').val(); // Mengirimkan filter asal
+                d._token = "{{ csrf_token() }}";
             },
             error: function(xhr, error, code) {
                 alert('Error loading data: ' + error);

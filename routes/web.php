@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
         
     });
     Route::group(['prefix' => 'pemasukan'], function () {
+        Route::middleware('authorize:ADM')->group(function () {
         Route::get('/', [PemasukanController::class, 'index']);
         Route::post('/list', [PemasukanController::class, 'list']); // Hapus /user/ yang berlebihan
         Route::get('/create', [PemasukanController::class, 'create']);
@@ -51,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/delete_ajax', [PemasukanController::class, 'confirm_ajax']);
         Route::delete('/{id}/delete_ajax', [PemasukanController::class, 'delete_ajax']);
         Route::delete('/{id}', [PemasukanController::class, 'destroy']);
-        
+        });
     });
 });
 
