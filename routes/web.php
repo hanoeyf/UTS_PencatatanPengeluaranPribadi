@@ -54,6 +54,8 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}', [PemasukanController::class, 'destroy']);
         Route::get('/import', [PemasukanController::class, 'import']);
         Route::post('/import_ajax', [PemasukanController::class, 'import_ajax']);
+        Route::get('/export_excel', [PemasukanController::class, 'export_excel']);
+    
         });
     });
 });

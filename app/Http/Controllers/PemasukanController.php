@@ -8,6 +8,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
+
 class PemasukanController extends Controller
 {
     /**
@@ -395,5 +396,52 @@ class PemasukanController extends Controller
 
         return redirect('/');
     }
+public function export_excel(){
+        $pemasukan = pemasukanModel::select('nama', 'jumlah', 'asal', 'tanggal')
+            ->orderBy('nama')
+            ->get();
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Nama pemasukan');
+        $sheet->setCellValue('C1', 'Jumlah');
+        $sheet->setCellValue('D1', 'Asal');
+        $sheet->setCellValue('E1', 'Tanggal');
+
+
+        $sheet->getStyle('A1:E1')->getFont()->setBold(true);
+        $no= 1;
+        $baris = 2;
+
+        foreach ($pemasukan as $key => $value) {
+            $sheet->setCellValue('A' .$baris, $no);
+            $sheet->setCellValue('B' .$baris, $value->nama);
+            $sheet->setCellValue('C' .$baris, $value->jumlah);
+            $sheet->setCellValue('D' .$baris, $value->asal);
+            $sheet->setCellValue('E' .$baris, $value->tanggal);
+           
+            $baris++;
+            $no++;
+        }
+        foreach (range('A', 'E') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+        $sheet->setTitle('Data pemasukan');
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $fileName = 'Data pemasukan' . date('Y-m-d-H:i:s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+        header('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+        header('Chache-Control: chace, must-revalidate');
+        header('Pragma: public');
+
+        $writer->save('php://output');
+        exit;
+    }
 }
+
 
