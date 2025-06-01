@@ -7,9 +7,10 @@
             <div class="card-tools">
                 <button onclick="modalAction('{{ url('/pemasukan/import') }}')" class="btn btn-info">Import Pemasukan</button>
                  <a href="{{ url('/pemasukan/export_excel') }}" class="btn btn-primary"><i class="fa fa-file- excel"></i> Export Pemasukan</a>
-                <button onclick="modalAction('{{ url('/pemasukan/create_ajax') }}')" class="btn btn-sm btn-success mt-1">
-                    Tambah Ajax
+                <button onclick="modalAction('{{ url('/pemasukan/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</a>
+                    
                 </button>
+                <a href="{{ url('/pemasukan/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file- pdf"></i> PDF Export Pemasukan</a>
             </div>
         </div>
         <div class="card-body">

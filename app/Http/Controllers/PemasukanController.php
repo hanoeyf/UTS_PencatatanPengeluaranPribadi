@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PDF as PdF; // Pastikan Anda sudah menginstal laravel-dompdf atau laravel-snappy
 
 
 class PemasukanController extends Controller
@@ -441,6 +442,19 @@ public function export_excel(){
 
         $writer->save('php://output');
         exit;
+    }
+public function export_pdf()
+    {
+        $pemasukan = PemasukanModel::select('nama', 'jumlah', 'asal', 'tanggal')
+            ->orderBy('nama')
+            ->get();
+
+        $pdf = PdF::loadView('pemasukan.export_pdf', ['pemasukan' => $pemasukan]);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data pemasukan' . date('Y-m-d-H:i:s') . '.pdf');
     }
 }
 
